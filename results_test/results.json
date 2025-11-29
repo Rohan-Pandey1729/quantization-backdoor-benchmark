@@ -1,0 +1,26 @@
+[
+  {
+    "quant_scheme": "fp32",
+    "defense": "ac",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.0892,
+    "detection_time_s": 51.06642413139343,
+    "detected": false,
+    "silhouette_score": 0.16397587954998016,
+    "cluster_sizes": [
+      "601",
+      "1447"
+    ],
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T12:36:54.015899"
+  },
+  {
+    "error": "Didn't find engine for operation quantized::linear_prepack NoQEngine",
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T12:36:54.057263"
+  }
+]

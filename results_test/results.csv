@@ -1,0 +1,3 @@
+quant_scheme,defense,model_size_mb,clean_accuracy,detection_time_s,detected,silhouette_score,cluster_sizes,dataset,attack,model,timestamp,error
+fp32,ac,42.640541076660156,0.0892,51.06642413139343,False,0.16397587954998016,"[np.int64(601), np.int64(1447)]",cifar10,badnet,preact_resnet18,2025-11-28T12:36:54.015899,
+,,,,,,,,cifar10,badnet,preact_resnet18,2025-11-28T12:36:54.057263,Didn't find engine for operation quantized::linear_prepack NoQEngine

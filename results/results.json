@@ -1,0 +1,360 @@
+[
+  {
+    "quant_scheme": "fp32",
+    "defense": "nc",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1,
+    "detection_time_s": 0.007866144180297852,
+    "detected": false,
+    "error": "can't optimize a non-leaf Tensor",
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T12:53:59.599832"
+  },
+  {
+    "quant_scheme": "fp32",
+    "defense": "ac",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1,
+    "detection_time_s": 57.480862855911255,
+    "detected": false,
+    "silhouette_score": 0.17759034037590027,
+    "cluster_sizes": [
+      "826",
+      "1222"
+    ],
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T12:58:10.352502"
+  },
+  {
+    "quant_scheme": "fp32",
+    "defense": "strip",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1,
+    "detection_time_s": 134.89505791664124,
+    "detected": false,
+    "mean_entropy": 2.3021466732025146,
+    "std_entropy": 6.185971869854257e-05,
+    "suspicious_samples": 26,
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:02:40.434425"
+  },
+  {
+    "quant_scheme": "fp32",
+    "defense": "ss",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1,
+    "detection_time_s": 0.0026900768280029297,
+    "detected": false,
+    "top_singular_value": 0.0,
+    "outlier_score": 0.0,
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:04:54.518300"
+  },
+  {
+    "quant_scheme": "fp32",
+    "defense": "fp",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1,
+    "detection_time_s": 0.0002071857452392578,
+    "detected": false,
+    "error": "run_fine_pruning() missing 1 required positional argument: 'clean_loader'",
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:07:01.147684"
+  },
+  {
+    "error": "Didn't find engine for operation quantized::linear_prepack NoQEngine",
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:07:01.191962"
+  },
+  {
+    "error": "Didn't find engine for operation quantized::linear_prepack NoQEngine",
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:07:01.209385"
+  },
+  {
+    "error": "Didn't find engine for operation quantized::linear_prepack NoQEngine",
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:07:01.226732"
+  },
+  {
+    "error": "Didn't find engine for operation quantized::linear_prepack NoQEngine",
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:07:01.242900"
+  },
+  {
+    "error": "Didn't find engine for operation quantized::linear_prepack NoQEngine",
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:07:01.258888"
+  },
+  {
+    "quant_scheme": "int4_simulated",
+    "defense": "nc",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1001,
+    "detection_time_s": 0.003167867660522461,
+    "detected": false,
+    "error": "can't optimize a non-leaf Tensor",
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:09:07.702147"
+  },
+  {
+    "quant_scheme": "int4_simulated",
+    "defense": "ac",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1001,
+    "detection_time_s": 52.81900906562805,
+    "detected": false,
+    "silhouette_score": 0.16473142802715302,
+    "cluster_sizes": [
+      "812",
+      "1236"
+    ],
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:12:25.945716"
+  },
+  {
+    "quant_scheme": "int4_simulated",
+    "defense": "strip",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1001,
+    "detection_time_s": 139.7120840549469,
+    "detected": false,
+    "mean_entropy": 2.302123785018921,
+    "std_entropy": 7.66594021115452e-05,
+    "suspicious_samples": 26,
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:16:49.118311"
+  },
+  {
+    "quant_scheme": "int4_simulated",
+    "defense": "ss",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1001,
+    "detection_time_s": 0.0021109580993652344,
+    "detected": false,
+    "top_singular_value": 0.0,
+    "outlier_score": 0.0,
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:19:37.524476"
+  },
+  {
+    "quant_scheme": "int4_simulated",
+    "defense": "fp",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1001,
+    "detection_time_s": 0.00028014183044433594,
+    "detected": false,
+    "error": "run_fine_pruning() missing 1 required positional argument: 'clean_loader'",
+    "dataset": "cifar10",
+    "attack": "badnet",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:21:47.926559"
+  },
+  {
+    "quant_scheme": "fp32",
+    "defense": "nc",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1163,
+    "detection_time_s": 0.004105091094970703,
+    "detected": false,
+    "error": "can't optimize a non-leaf Tensor",
+    "dataset": "cifar10",
+    "attack": "blended",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:23:54.026773"
+  },
+  {
+    "quant_scheme": "fp32",
+    "defense": "ac",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1163,
+    "detection_time_s": 51.834930181503296,
+    "detected": false,
+    "silhouette_score": 0.14640453457832336,
+    "cluster_sizes": [
+      "1188",
+      "860"
+    ],
+    "dataset": "cifar10",
+    "attack": "blended",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:27:04.958071"
+  },
+  {
+    "quant_scheme": "fp32",
+    "defense": "strip",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1163,
+    "detection_time_s": 125.73412585258484,
+    "detected": false,
+    "mean_entropy": 2.3020150661468506,
+    "std_entropy": 3.8425656384788454e-05,
+    "suspicious_samples": 26,
+    "dataset": "cifar10",
+    "attack": "blended",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:31:13.580103"
+  },
+  {
+    "quant_scheme": "fp32",
+    "defense": "ss",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1163,
+    "detection_time_s": 0.0029969215393066406,
+    "detected": false,
+    "top_singular_value": 0.0,
+    "outlier_score": 0.0,
+    "dataset": "cifar10",
+    "attack": "blended",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:33:31.273038"
+  },
+  {
+    "quant_scheme": "fp32",
+    "defense": "fp",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1163,
+    "detection_time_s": 0.00020503997802734375,
+    "detected": false,
+    "error": "run_fine_pruning() missing 1 required positional argument: 'clean_loader'",
+    "dataset": "cifar10",
+    "attack": "blended",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:35:44.524559"
+  },
+  {
+    "error": "Didn't find engine for operation quantized::linear_prepack NoQEngine",
+    "dataset": "cifar10",
+    "attack": "blended",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:35:44.587748"
+  },
+  {
+    "error": "Didn't find engine for operation quantized::linear_prepack NoQEngine",
+    "dataset": "cifar10",
+    "attack": "blended",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:35:44.610064"
+  },
+  {
+    "error": "Didn't find engine for operation quantized::linear_prepack NoQEngine",
+    "dataset": "cifar10",
+    "attack": "blended",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:35:44.629386"
+  },
+  {
+    "error": "Didn't find engine for operation quantized::linear_prepack NoQEngine",
+    "dataset": "cifar10",
+    "attack": "blended",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:35:44.646726"
+  },
+  {
+    "error": "Didn't find engine for operation quantized::linear_prepack NoQEngine",
+    "dataset": "cifar10",
+    "attack": "blended",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:35:44.664462"
+  },
+  {
+    "quant_scheme": "int4_simulated",
+    "defense": "nc",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1199,
+    "detection_time_s": 0.0035431385040283203,
+    "detected": false,
+    "error": "can't optimize a non-leaf Tensor",
+    "dataset": "cifar10",
+    "attack": "blended",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:37:56.766763"
+  },
+  {
+    "quant_scheme": "int4_simulated",
+    "defense": "ac",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1199,
+    "detection_time_s": 54.262346029281616,
+    "detected": false,
+    "silhouette_score": 0.15254919230937958,
+    "cluster_sizes": [
+      "1233",
+      "815"
+    ],
+    "dataset": "cifar10",
+    "attack": "blended",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:40:59.169424"
+  },
+  {
+    "quant_scheme": "int4_simulated",
+    "defense": "strip",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1199,
+    "detection_time_s": 133.665265083313,
+    "detected": false,
+    "mean_entropy": 2.3020267486572266,
+    "std_entropy": 3.841820216621272e-05,
+    "suspicious_samples": 26,
+    "dataset": "cifar10",
+    "attack": "blended",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:45:17.017202"
+  },
+  {
+    "quant_scheme": "int4_simulated",
+    "defense": "ss",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1199,
+    "detection_time_s": 0.0022830963134765625,
+    "detected": false,
+    "top_singular_value": 0.0,
+    "outlier_score": 0.0,
+    "dataset": "cifar10",
+    "attack": "blended",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:47:38.479657"
+  },
+  {
+    "quant_scheme": "int4_simulated",
+    "defense": "fp",
+    "model_size_mb": 42.640541076660156,
+    "clean_accuracy": 0.1199,
+    "detection_time_s": 0.00018215179443359375,
+    "detected": false,
+    "error": "run_fine_pruning() missing 1 required positional argument: 'clean_loader'",
+    "dataset": "cifar10",
+    "attack": "blended",
+    "model": "preact_resnet18",
+    "timestamp": "2025-11-28T13:49:45.006683"
+  }
+]
