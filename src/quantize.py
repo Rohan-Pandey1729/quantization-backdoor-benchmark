@@ -1,229 +1,96 @@
 """
-Quantization utilities for backdoor defense evaluation.
-
-This module provides functions to quantize PyTorch models to INT8 and INT4
-precision using PyTorch's native quantization APIs.
+Quantization utilities for backdoor defense benchmark.
+Supports FP32, INT8 (dynamic), and simulated INT4 quantization.
 """
 
 import torch
 import torch.nn as nn
-from torch.ao.quantization import get_default_qconfig_mapping, quantize_fx
-from torch.ao.quantization.quantize_fx import prepare_fx, convert_fx
 import copy
-from typing import Tuple, Optional
-import warnings
-torch.backends.quantized.engine = 'fbgemm'
 
-warnings.filterwarnings('ignore')
+# Set quantization backend - CRITICAL FIX
+try:
+    torch.backends.quantized.engine = 'qnnpack'
+except Exception:
+    try:
+        torch.backends.quantized.engine = 'fbgemm'
+    except Exception:
+        print("Warning: No quantization backend available, INT8 will be skipped")
 
 
-def quantize_model_int8_static(
-    model: nn.Module,
-    calibration_loader: torch.utils.data.DataLoader,
-    num_calibration_batches: int = 100,
-    device: str = 'cpu'
-) -> nn.Module:
+def quantize_model_int8_dynamic(model):
     """
-    Quantize a model to INT8 using static post-training quantization.
-    
-    Args:
-        model: The PyTorch model to quantize
-        calibration_loader: DataLoader for calibration data
-        num_calibration_batches: Number of batches to use for calibration
-        device: Device to run calibration on
-        
-    Returns:
-        Quantized INT8 model
+    Apply INT8 dynamic quantization to a model.
+    Dynamic quantization quantizes weights statically and activations dynamically.
     """
-    model = copy.deepcopy(model)
-    model.eval()
-    model.to(device)
+    model_copy = copy.deepcopy(model)
+    model_copy.eval()
     
-    # Get example input for tracing
-    example_inputs = next(iter(calibration_loader))[0][:1].to(device)
-    
-    # Set up quantization config
-    qconfig_mapping = get_default_qconfig_mapping("x86")
-    
-    # Prepare model for quantization
-    prepared_model = prepare_fx(
-        model, 
-        qconfig_mapping, 
-        example_inputs=example_inputs
-    )
-    
-    # Calibrate with representative data
-    with torch.no_grad():
-        for i, (images, _) in enumerate(calibration_loader):
-            if i >= num_calibration_batches:
-                break
-            images = images.to(device)
-            prepared_model(images)
-    
-    # Convert to quantized model
-    quantized_model = convert_fx(prepared_model)
-    
-    return quantized_model
-
-
-def quantize_model_int8_dynamic(model: nn.Module) -> nn.Module:
-    """
-    Quantize a model to INT8 using dynamic quantization.
-    This is simpler and doesn't require calibration data.
-    
-    Args:
-        model: The PyTorch model to quantize
-        
-    Returns:
-        Dynamically quantized INT8 model
-    """
-    model = copy.deepcopy(model)
-    model.eval()
-    
-    # Dynamic quantization - quantizes weights statically, activations dynamically
-    quantized_model = torch.ao.quantization.quantize_dynamic(
-        model,
+    # Dynamic quantization on linear and conv layers
+    quantized_model = torch.quantization.quantize_dynamic(
+        model_copy,
         {nn.Linear, nn.Conv2d},
         dtype=torch.qint8
     )
-    
     return quantized_model
 
 
-def simulate_int4_quantization(model: nn.Module) -> nn.Module:
+def simulate_int4_quantization(model):
     """
     Simulate INT4 quantization by quantizing weights to 4-bit precision.
-    Note: PyTorch doesn't natively support INT4, so we simulate it.
-    
-    Args:
-        model: The PyTorch model to quantize
-        
-    Returns:
-        Model with simulated INT4 weights
+    PyTorch doesn't natively support INT4, so we simulate it.
     """
-    model = copy.deepcopy(model)
-    model.eval()
+    model_copy = copy.deepcopy(model)
+    model_copy.eval()
     
     with torch.no_grad():
-        for name, param in model.named_parameters():
+        for name, param in model_copy.named_parameters():
             if 'weight' in name:
-                # Simulate 4-bit quantization
-                # INT4 range: -8 to 7 (signed) or 0 to 15 (unsigned)
-                min_val = param.min()
-                max_val = param.max()
+                # Get min/max for the weight tensor
+                w_min = param.min()
+                w_max = param.max()
                 
-                # Scale to 4-bit range
-                scale = (max_val - min_val) / 15  # 16 levels for 4-bit
+                # Quantize to 4-bit (16 levels: -8 to 7)
+                scale = (w_max - w_min) / 15
                 if scale == 0:
-                    scale = 1e-8
+                    continue
                     
-                # Quantize
-                quantized = torch.round((param - min_val) / scale)
+                # Quantize and dequantize
+                quantized = torch.round((param - w_min) / scale)
                 quantized = torch.clamp(quantized, 0, 15)
+                dequantized = quantized * scale + w_min
                 
-                # Dequantize
-                dequantized = quantized * scale + min_val
                 param.copy_(dequantized)
     
-    return model
+    return model_copy
 
 
-def get_model_size_mb(model: nn.Module) -> float:
-    """Calculate model size in megabytes."""
+def get_model_size_mb(model):
+    """Calculate model size in MB."""
     param_size = 0
     for param in model.parameters():
         param_size += param.nelement() * param.element_size()
-    
     buffer_size = 0
     for buffer in model.buffers():
         buffer_size += buffer.nelement() * buffer.element_size()
-    
-    size_mb = (param_size + buffer_size) / 1024 / 1024
-    return size_mb
+    return (param_size + buffer_size) / 1024 / 1024
 
 
-def evaluate_model(
-    model: nn.Module,
-    test_loader: torch.utils.data.DataLoader,
-    device: str = 'cpu'
-) -> Tuple[float, float]:
+def quantize_model(model, scheme='fp32'):
     """
-    Evaluate model accuracy on clean and triggered data.
+    Main quantization function.
     
     Args:
-        model: Model to evaluate
-        test_loader: Test data loader
-        device: Device to run evaluation on
-        
+        model: PyTorch model
+        scheme: One of 'fp32', 'int8_dynamic', 'int4_simulated'
+    
     Returns:
-        Tuple of (clean_accuracy, attack_success_rate)
+        Quantized model (or original for fp32)
     """
-    model.eval()
-    model.to(device)
-    
-    correct = 0
-    total = 0
-    
-    with torch.no_grad():
-        for images, labels in test_loader:
-            images, labels = images.to(device), labels.to(device)
-            outputs = model(images)
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-    
-    accuracy = correct / total
-    return accuracy
-
-
-class QuantizationManager:
-    """
-    Manager class for handling different quantization schemes.
-    """
-    
-    SUPPORTED_SCHEMES = ['fp32', 'int8_static', 'int8_dynamic', 'int4_simulated']
-    
-    def __init__(self, calibration_loader: Optional[torch.utils.data.DataLoader] = None):
-        self.calibration_loader = calibration_loader
-        
-    def quantize(
-        self, 
-        model: nn.Module, 
-        scheme: str,
-        device: str = 'cpu'
-    ) -> nn.Module:
-        """
-        Quantize model using specified scheme.
-        
-        Args:
-            model: Model to quantize
-            scheme: One of 'fp32', 'int8_static', 'int8_dynamic', 'int4_simulated'
-            device: Device for calibration (if needed)
-            
-        Returns:
-            Quantized model
-        """
-        if scheme not in self.SUPPORTED_SCHEMES:
-            raise ValueError(f"Scheme must be one of {self.SUPPORTED_SCHEMES}")
-        
-        if scheme == 'fp32':
-            return copy.deepcopy(model)
-        
-        elif scheme == 'int8_static':
-            if self.calibration_loader is None:
-                raise ValueError("Calibration loader required for static quantization")
-            return quantize_model_int8_static(model, self.calibration_loader, device=device)
-        
-        elif scheme == 'int8_dynamic':
-            return quantize_model_int8_dynamic(model)
-        
-        elif scheme == 'int4_simulated':
-            return simulate_int4_quantization(model)
-        
-        return model
-
-
-if __name__ == "__main__":
-    # Quick test
-    print("Quantization utilities loaded successfully!")
-    print(f"Supported schemes: {QuantizationManager.SUPPORTED_SCHEMES}")
+    if scheme == 'fp32':
+        return copy.deepcopy(model)
+    elif scheme == 'int8_dynamic':
+        return quantize_model_int8_dynamic(model)
+    elif scheme == 'int4_simulated':
+        return simulate_int4_quantization(model)
+    else:
+        raise ValueError(f"Unknown quantization scheme: {scheme}")
